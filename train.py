@@ -8,6 +8,7 @@
 
 import pandas as pd
 import numpy as np
+import os
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
@@ -16,7 +17,8 @@ import joblib
 
 # - - - Load Data - - -
 print("Loading data ...")
-df = pd.read_csv('train.csv')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+df = pd.read_csv(os.path.join(script_dir, 'train.csv'))
 print(f"Dataset shape: {df.shape}")
 
 
@@ -33,6 +35,7 @@ df['log_loss'] = np.log(df['loss'])
 # X = features (what the model sees), y = target (what it predicts)
 X = df[cont_cols]
 y = df['log_loss']
+print(f"My X columns are: {X}")
 
 # --- Split Data ---
 # 80% for training, 20% for testing on unseen data
@@ -144,7 +147,7 @@ print(top_10)
 # --- Save Best Model ---
 # Save the best model (LR with all features, R2=0.52)
 # so it can be loaded later without retraining
-joblib.dump(lr_all, 'model.joblib')
+joblib.dump(lr_all, os.path.join(script_dir, 'model.joblib'))
 print("\nBest model saved to model.joblib")
 
 
